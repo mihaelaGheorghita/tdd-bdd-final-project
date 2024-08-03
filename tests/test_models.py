@@ -66,6 +66,14 @@ class TestProductModel(unittest.TestCase):
         """This runs after each test"""
         db.session.remove()
 
+    @classmethod
+    def _create_a_factory_product(cls):
+        """Helper method that creates and returns a product"""
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        return product
+
     ######################################################################
     #  T E S T   C A S E S
     ######################################################################
@@ -101,6 +109,19 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(new_product.available, product.available)
         self.assertEqual(new_product.category, product.category)
 
-    #
-    # ADD YOUR TEST CASES HERE
-    #
+     def test_read_a_product(self):
+        """It should Read a Product"""
+        product = self._create_a_factory_product()
+        self.assertIsNotNone(product.id)
+        # now fetch the product and read it
+        new_product = Product.find(product.id)
+        self.assertEqual(new_product.name, product.name)
+        self.assertEqual(new_product.description, product.description)
+        self.assertEqual(new_product.available, product.available)
+        self.assertEqual(new_product.category, product.category)
+    
+    def test_update_a_product(self):
+        """It should Update a Product"""
+        product = self._create_a_factory_product()
+        # update here category
+        self.assertIsNotNone(product.id)
